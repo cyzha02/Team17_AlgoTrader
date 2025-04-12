@@ -162,24 +162,6 @@ const Home: React.FC = () => {
     };
   }, []);
 
-  const handleBuy = (
-    value: string,
-    orderType: "market" | "limit",
-    limitPrice?: string
-  ) => {
-    console.log("Buy order:", { value, orderType, limitPrice });
-    // TODO: Implement buy logic
-  };
-
-  const handleSell = (
-    value: string,
-    orderType: "market" | "limit",
-    limitPrice?: string
-  ) => {
-    console.log("Sell order:", { value, orderType, limitPrice });
-    // TODO: Implement sell logic
-  };
-
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -236,21 +218,6 @@ const Home: React.FC = () => {
       <p className="text-green-500">
         Current Price: {stockData[stockData.length - 1]?.price || "N/A"}
       </p>
-
-      <div className="flex flex-col items-center space-y-4">
-        <div className="flex flex-row gap-2 justify-center">
-          <InputWithButton
-            name="Buy"
-            onSubmit={handleBuy}
-            className="bg-green-500"
-          />
-          <InputWithButton
-            name="Sell"
-            onSubmit={handleSell}
-            className="bg-red-500"
-          />
-        </div>
-      </div>
     </div>
   );
 };
