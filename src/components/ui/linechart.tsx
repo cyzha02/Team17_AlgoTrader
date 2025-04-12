@@ -1,5 +1,5 @@
 import { TrendingUp } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
 import {
   Card,
   CardContent,
@@ -8,75 +8,67 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-];
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
-  },
-} satisfies ChartConfig;
-export function LineChart() {
+
+import { StockData } from "../../ApiCalls/StockHistory";
+
+interface LineChartProps {
+  data: StockData[];
+}
+
+export function LineChart({ data }:LineChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Area Chart - Linear</CardTitle>
+        <CardTitle>HACK Stock History</CardTitle>
         <CardDescription>
-          Showing total visitors for the last 6 months
+          Historical price data for HACK
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <div className="h-[400px] w-full">
           <AreaChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
+            width={800}
+            height={400}
+            data={data}
+            margin={{ 
+              top: 10, 
+              right: 30, 
+              left: 0, 
+              bottom: 0,
             }}
           >
             <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
+            <XAxis 
+              dataKey="timestamp"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(value) => new Date(value).toLocaleDateString()}
             />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="dot" hideLabel />}
+            <YAxis 
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+            />
+            <Tooltip
+              labelFormatter={(value) => new Date(value).toLocaleString()}
+              formatter={(value: number) => [`$${value.toFixed(2)}`, 'Price']}
             />
             <Area
-              dataKey="desktop"
-              type="linear"
-              fill="var(--color-desktop)"
-              fillOpacity={0.4}
-              stroke="var(--color-desktop)"
+              type="monotone"
+              dataKey="price"
+              stroke="#8884d8"
+              fill="#8884d8"
+              fillOpacity={0.3}
             />
           </AreaChart>
-        </ChartContainer>
+        </div>
       </CardContent>
       <CardFooter>
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
-            <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-            </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              January - June 2024
+              Stock Price History
             </div>
           </div>
         </div>
