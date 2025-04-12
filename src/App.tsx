@@ -10,12 +10,12 @@ import Home from "./pages/MainScreen";
 import About from "./pages/About";
 import "./App.css";
 import Login from "./pages/Login";
-import ApiService from "./ApiCalls/ApiService";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
 function AppContent() {
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
-  const isAuthenticated = ApiService.isUserAuthenticated();
 
   return (
     <div className="app-container">
@@ -40,7 +40,9 @@ function AppContent() {
 function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </BrowserRouter>
   );
 }

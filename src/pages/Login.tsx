@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ApiService from "../ApiCalls/ApiService";
 import { TradingCredentials } from "../types/trading";
+import { useAuth } from "../context/AuthContext";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [credentials, setCredentials] = useState<TradingCredentials>({
     user_id: 0,
     password: "",
@@ -18,11 +19,10 @@ const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      ApiService.setCredentials(credentials);
-      const success = await ApiService.authenticate();
+      const success = await login(credentials);
 
       if (success) {
-        navigate("/", { state: { userId: credentials.user_id } }); // Redirect to dashboard after successful login (which is the root page)
+        navigate("/");
       } else {
         setError("Invalid credentials");
       }

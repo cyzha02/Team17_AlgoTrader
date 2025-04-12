@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
-import { fetchStockHistory, StockData, UserInfo } from "../ApiCalls/StockHistory";
+import {
+  fetchStockHistory,
+  StockData,
+  UserInfo,
+} from "../ApiCalls/StockHistory";
 import TradingService from "../ApiCalls/TradingService";
 import { SmaCrossoverStrategy } from "../Algo/SmaCrossoverAlgo";
 import { LineChart } from "@/components/ui/linechart";
 import { InputWithButton } from "@/components/ui/inputwithbutton";
-import { OrderRequest } from '../types/trading'
+import { OrderRequest } from "../types/trading";
+import { useAuth } from "../context/AuthContext";
 
 const Home: React.FC = () => {
-  const location = useLocation();
-  const userId = location.state?.userId;
-
+  const { userId } = useAuth();
   const [stockData, setStockData] = useState<StockData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
@@ -19,7 +21,10 @@ const Home: React.FC = () => {
   const algoIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const addLog = (message: string) => {
-    setLogs(prev => [...prev, `${new Date().toLocaleTimeString()}: ${message}`]);
+    setLogs((prev) => [
+      ...prev,
+      `${new Date().toLocaleTimeString()}: ${message}`,
+    ]);
   };
 
   const startAlgorithm = async () => {
@@ -38,7 +43,9 @@ const Home: React.FC = () => {
           addLog("No trading signal generated");
         }
       } catch (error) {
-        addLog(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        addLog(
+          `Error: ${error instanceof Error ? error.message : "Unknown error"}`
+        );
       }
     }, 10000);
 
@@ -49,13 +56,15 @@ const Home: React.FC = () => {
         addLog(`Initial order placed: ${JSON.stringify(result)}`);
       }
     } catch (error) {
-      addLog(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      addLog(
+        `Error: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
     }
   };
 
   const stopAlgorithm = async () => {
     if (!isAlgoRunning) return;
-    
+
     // Clear the interval
     if (algoIntervalRef.current) {
       clearInterval(algoIntervalRef.current);
@@ -66,29 +75,35 @@ const Home: React.FC = () => {
 
     try {
       // Get account info to check positions
-      const accountInfo = await TradingService.getAccountInfo(userId) as UserInfo;
-      
+      const accountInfo = (await TradingService.getAccountInfo(
+        userId!
+      )) as UserInfo;
+
       // Place market sell orders for all positions
       if (accountInfo.open_positions && accountInfo.open_positions.length > 0) {
         for (const position of accountInfo.open_positions) {
           const sellOrder: OrderRequest = {
-            user_id: userId,
+            user_id: userId!,
             symbol: position.symbol,
-            side: 'sell' as const,
+            side: "sell" as const,
             quantity: position.volume,
-            order_type: 'market' as const,
-            limit_price: 0
+            order_type: "market" as const,
+            limit_price: 0,
           };
-          
+
           const result = await TradingService.placeOrder(sellOrder);
           addLog(`Liquidation order placed: ${JSON.stringify(result)}`);
         }
       }
-      
+
       setIsAlgoRunning(false);
       addLog("Algorithm stopped and positions liquidated");
     } catch (error) {
-      addLog(`Error during liquidation: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      addLog(
+        `Error during liquidation: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     }
   };
 
@@ -103,7 +118,7 @@ const Home: React.FC = () => {
       // Fetch both data in parallel
       const [accountInfo, stockHistoryData] = await Promise.all([
         TradingService.getAccountInfo(userId),
-        fetchStockHistory()
+        fetchStockHistory(),
       ]);
 
       console.log("Account Info:", accountInfo);
@@ -117,24 +132,26 @@ const Home: React.FC = () => {
 
   // Single data fetching
   useEffect(() => {
-    fetchAllData();
+    if (userId) {
+      fetchAllData();
 
-    // Set up interval for subsequent stock data fetching
-    const intervalId = setInterval(async () => {
-      try {
-        const data = await fetchStockHistory();
-        setStockData([...data].reverse());
-      } catch (error) {
-        console.error("Error updating stock data:", error);
-        // Don't set error state here to avoid disrupting the UI
-      }
-    }, 3000);
+      // Set up interval for subsequent stock data fetching
+      const intervalId = setInterval(async () => {
+        try {
+          const data = await fetchStockHistory();
+          setStockData([...data].reverse());
+        } catch (error) {
+          console.error("Error updating stock data:", error);
+          // Don't set error state here to avoid disrupting the UI
+        }
+      }, 3000);
 
-    // Cleanup function
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [userId]); // Add userId as dependency
+      // Cleanup function
+      return () => {
+        clearInterval(intervalId);
+      };
+    }
+  }, [userId]);
 
   // Separate algorithm cleanup
   useEffect(() => {
@@ -185,9 +202,9 @@ const Home: React.FC = () => {
           onClick={startAlgorithm}
           disabled={isAlgoRunning}
           className={`px-4 py-2 rounded ${
-            isAlgoRunning 
-              ? 'bg-gray-500 cursor-not-allowed' 
-              : 'bg-green-500 hover:bg-green-600'
+            isAlgoRunning
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-green-500 hover:bg-green-600"
           }`}
         >
           Start Algorithm
@@ -196,9 +213,9 @@ const Home: React.FC = () => {
           onClick={stopAlgorithm}
           disabled={!isAlgoRunning}
           className={`px-4 py-2 rounded ${
-            !isAlgoRunning 
-              ? 'bg-gray-500 cursor-not-allowed' 
-              : 'bg-red-500 hover:bg-red-600'
+            !isAlgoRunning
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-red-500 hover:bg-red-600"
           }`}
         >
           End Algorithm
