@@ -4,7 +4,7 @@ import {
   StockData,
   userInfo,
   UserInfo,
-} from "./src/ApiCalls/StockHistory";
+} from "../ApiCalls/StockHistory";
 import { LineChart } from "@/components/ui/linechart";
 import { InputWithButton } from "@/components/ui/inputwithbutton";
 
