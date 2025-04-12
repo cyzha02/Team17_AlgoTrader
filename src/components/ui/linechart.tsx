@@ -23,6 +23,11 @@ interface LineChartProps {
 }
 
 export function LineChart({ data }: LineChartProps) {
+  const formatTime = (timestamp: number) => {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -48,12 +53,14 @@ export function LineChart({ data }: LineChartProps) {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => new Date(value).toLocaleDateString()}
+              tickFormatter={formatTime}
             />
             <YAxis tickLine={false} axisLine={false} tickMargin={8} />
             <Tooltip
-              labelFormatter={(value) => new Date(value).toLocaleString()}
               formatter={(value: number) => [`$${value.toFixed(2)}`, "Price"]}
+              labelFormatter={(timestamp) =>
+                new Date(timestamp).toLocaleString()
+              }
             />
             <Area
               type="monotone"

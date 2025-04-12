@@ -10,19 +10,19 @@ const Home: React.FC = () => {
   const [error, setError] = useState<string>("");
   const [orderType, setOrderType] = useState<"market" | "limit">("market");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchStockHistory();
-        setStockData([...data].reverse());
-        console.log("Stock data updated");
-      } catch (error) {
-        setError("Error fetching stock data");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const data = await fetchStockHistory();
+      setStockData([...data].reverse());
+      console.log("Stock data updated");
+    } catch (error) {
+      setError("Error fetching stock data");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
     // set up interval for subsequent fetching every 5 seconds
     const intervalId = setInterval(fetchData, 5000);
@@ -61,12 +61,23 @@ const Home: React.FC = () => {
       <h1 className="text-green-500 font-bold text-4xl">HACK Stock Trader</h1>
       <p className="text-green-500">The algorithmic trading platform</p>
 
-      <LineChart data={stockData} />
+      <div className="relative">
+        <LineChart data={stockData} />
+        <div className="absolute bottom-2 right-2 bg-white/80 px-2 py-1 rounded text-sm">
+          Last update: {new Date(stockData[0]?.timestamp).toLocaleTimeString()}
+        </div>
+      </div>
+
       <p className="text-green-500">
-        Current Price: {stockData[stockData.length - 1].price}
+        Current Price: {stockData[0]?.price || "N/A"}
       </p>
-      <p className="text-white text-2xl font-bold">MANUAL TRADE</p>
+
       <div className="flex flex-col items-center space-y-4">
+        <div className="flex items-center space-x-2">
+          <span className="text-green-500">Order Type:</span>
+          <OrderTypeSelect value={orderType} onChange={setOrderType} />
+        </div>
+
         <div className="flex flex-row gap-2 justify-center">
           <InputWithButton
             name="Buy"
