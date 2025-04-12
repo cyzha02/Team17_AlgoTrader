@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { fetchStockHistory, StockData } from "./src/ApiCalls/StockHistory";
 import { LineChart } from "@/components/ui/linechart";
 import { InputWithButton } from "@/components/ui/inputwithbutton";
-import { useState } from "react";
 
 
 const Home: React.FC = () => {
