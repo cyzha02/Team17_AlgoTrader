@@ -15,7 +15,7 @@ const Home: React.FC = () => {
     const fetchData = async () => {
       try {
         const data = await fetchStockHistory();
-        setStockData(data);
+        setStockData([...data].reverse());
       } catch (error) {
         setError("Error fetching stock data");
       } finally {
