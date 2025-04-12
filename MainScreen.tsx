@@ -3,14 +3,13 @@ import { fetchStockHistory, StockData } from "./src/ApiCalls/StockHistory";
 import { LineChart } from "@/components/ui/linechart";
 import { InputWithButton } from "@/components/ui/inputwithbutton";
 
-
 const Home: React.FC = () => {
   const [buy, setBuy] = useState(0);
   const [sell, setSell] = useState(0);
 
   const [stockData, setStockData] = useState<StockData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,9 +17,9 @@ const Home: React.FC = () => {
         const data = await fetchStockHistory();
         setStockData(data);
       } catch (error) {
-        setError('Error fetching stock data');
+        setError("Error fetching stock data");
       } finally {
-        setLoading(false);  
+        setLoading(false);
       }
     };
 
@@ -35,9 +34,9 @@ const Home: React.FC = () => {
     return <div>{error}</div>;
   }
   return (
-    <div className="home-container">
-      <h1>HACK Stock AI</h1>
-      <p>Algorithmic trading platform</p>
+    <div className="home-container ">
+      <h1 className="text-green-500 font-bold text-4xl">HACK Stock Trader</h1>
+      <p className="text-green-500">The algorithmic trading platform</p>
       <LineChart data={stockData} />
       <div className="flex flex-row gap-2 justify-center">
         <InputWithButton

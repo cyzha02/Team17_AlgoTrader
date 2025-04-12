@@ -1,2 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+
+.app-container {
+  background-color: #000000;
+}

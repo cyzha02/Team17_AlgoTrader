@@ -14,7 +14,7 @@ export function InputWithButton({
 }: InputWithButtonProps) {
   return (
     <div className={`flex w-full max-w-sm items-center space-x-2`}>
-      <Input type="text" placeholder="Value" />
+      <Input type="text" placeholder="Value" className="bg-white" />
       <Button type="submit" onClick={onSubmit} className={className}>
         {name}
       </Button>

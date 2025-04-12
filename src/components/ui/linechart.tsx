@@ -1,5 +1,12 @@
 import { TrendingUp } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+} from "recharts";
 import {
   Card,
   CardContent,
@@ -15,14 +22,12 @@ interface LineChartProps {
   data: StockData[];
 }
 
-export function LineChart({ data }:LineChartProps) {
+export function LineChart({ data }: LineChartProps) {
   return (
     <Card>
       <CardHeader>
         <CardTitle>HACK Stock History</CardTitle>
-        <CardDescription>
-          Historical price data for HACK
-        </CardDescription>
+        <CardDescription>Historical price data for HACK</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-[400px] w-full flex items-center justify-center">
@@ -30,29 +35,25 @@ export function LineChart({ data }:LineChartProps) {
             width={800}
             height={400}
             data={data}
-            margin={{ 
-              top: 10, 
-              right: 30, 
-              left: 0, 
+            margin={{
+              top: 10,
+              right: 30,
+              left: 0,
               bottom: 0,
             }}
           >
             <CartesianGrid vertical={false} />
-            <XAxis 
+            <XAxis
               dataKey="timestamp"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
               tickFormatter={(value) => new Date(value).toLocaleDateString()}
             />
-            <YAxis 
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-            />
+            <YAxis tickLine={false} axisLine={false} tickMargin={8} />
             <Tooltip
               labelFormatter={(value) => new Date(value).toLocaleString()}
-              formatter={(value: number) => [`$${value.toFixed(2)}`, 'Price']}
+              formatter={(value: number) => [`$${value.toFixed(2)}`, "Price"]}
             />
             <Area
               type="monotone"
@@ -66,8 +67,7 @@ export function LineChart({ data }:LineChartProps) {
       </CardContent>
       <CardFooter>
         <div className="flex w-full items-start gap-2 text-sm">
-          <div className="grid gap-2">
-          </div>
+          <div className="grid gap-2"></div>
         </div>
       </CardFooter>
     </Card>
