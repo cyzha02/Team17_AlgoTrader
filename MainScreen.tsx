@@ -37,7 +37,9 @@ const Home: React.FC = () => {
     <div className="home-container ">
       <h1 className="text-green-500 font-bold text-4xl">HACK Stock Trader</h1>
       <p className="text-green-500">The algorithmic trading platform</p>
+
       <LineChart data={stockData} />
+      <p className="text-green-500"> Current Price: {stockData[0].price}</p>
       <div className="flex flex-row gap-2 justify-center">
         <InputWithButton
           name="Buy"
