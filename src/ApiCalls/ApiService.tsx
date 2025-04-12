@@ -1,6 +1,6 @@
 import { TradingCredentials } from "../types/trading";
 
-const API_URL = process.env.REACT_APP_API_URL || "http://82.29.197.23:8000";
+const API_URL = import.meta.env.VITE_API_URL || "http://82.29.197.23:8000";
 
 interface AuthResponse {
   message: string;
@@ -10,8 +10,8 @@ interface AuthResponse {
 
 class ApiService {
   private static credentials: TradingCredentials = {
-    user_id: Number(process.env.REACT_APP_user_id),
-    password: process.env.REACT_APP_password || "",
+    user_id: Number(import.meta.env.VITE_user_id),
+    password: import.meta.env.VITE_password || "",
   };
 
   private static isAuthenticated: boolean = false;
