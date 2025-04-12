@@ -1,6 +1,6 @@
 import { TradingCredentials } from "../types/trading";
-import env from "../env";
-const BASE_URL = "http://82.29.197.23:8000";
+
+const API_URL = process.env.REACT_APP_API_URL || "http://82.29.197.23:8000";
 
 interface AuthResponse {
   message: string;
@@ -10,8 +10,8 @@ interface AuthResponse {
 
 class ApiService {
   private static credentials: TradingCredentials = {
-    user_id: Number(env.user_id),
-    password: env.password || "",
+    user_id: Number(process.env.REACT_APP_user_id),
+    password: process.env.REACT_APP_password || "",
   };
 
   private static isAuthenticated: boolean = false;
@@ -29,7 +29,7 @@ class ApiService {
 
   static async authenticate() {
     try {
-      const response = await fetch(`${BASE_URL}/accounts/authenticate`, {
+      const response = await fetch(`${API_URL}/accounts/authenticate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -78,7 +78,7 @@ class ApiService {
       ...options.headers,
     };
 
-    const response = await fetch(`${BASE_URL}${endpoint}`, {
+    const response = await fetch(`${API_URL}${endpoint}`, {
       ...options,
       headers,
     });
