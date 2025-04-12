@@ -69,7 +69,9 @@ class ApiService {
     }
 
     const headers = {
-      Authorization: `Basic ${btoa(`${this.credentials.user_id}:${this.credentials.password}`)}`,
+      Authorization: `Basic ${btoa(
+        `${this.credentials.user_id}:${this.credentials.password}`
+      )}`,
       "Content-Type": "application/json",
       ...options.headers,
     };

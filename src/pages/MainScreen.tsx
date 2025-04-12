@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  fetchStockHistory,
-  StockData,
-  userInfo,
-  UserInfo,
-} from "../ApiCalls/StockHistory";
+import { fetchStockHistory, StockData } from "../ApiCalls/StockHistory";
+import TradingService from "../ApiCalls/TradingService";
 import { LineChart } from "@/components/ui/linechart";
 import { InputWithButton } from "@/components/ui/inputwithbutton";
 
@@ -13,12 +9,11 @@ const Home: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [orderType, setOrderType] = useState<"market" | "limit">("market");
-  const [userData, setUserData] = useState<UserInfo>();
 
   const fetchUserData = async () => {
     try {
-      const response = await userInfo();
-      setUserData(response);
+      const accountInfo = await TradingService.getAccountInfo(3);
+      console.log("Account Info:", accountInfo);
     } catch {
       setError("Error fetching user data");
     } finally {
