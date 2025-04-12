@@ -14,7 +14,6 @@ const Home: React.FC = () => {
     try {
       const data = await fetchStockHistory();
       setStockData([...data].reverse());
-      console.log("Stock data updated");
     } catch (error) {
       setError("Error fetching stock data");
     } finally {
@@ -24,8 +23,8 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-    // set up interval for subsequent fetching every 5 seconds
-    const intervalId = setInterval(fetchData, 5000);
+    // set up interval for subsequent fetching every 3 seconds
+    const intervalId = setInterval(fetchData, 3000);
     // cleanup to clear interval on component unmount
     return () => clearInterval(intervalId);
   }, []);
