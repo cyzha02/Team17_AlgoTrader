@@ -25,7 +25,7 @@ export function LineChart({ data }:LineChartProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="h-[400px] w-full">
+        <div className="h-[400px] w-full flex items-center justify-center">
           <AreaChart
             width={800}
             height={400}
@@ -67,9 +67,6 @@ export function LineChart({ data }:LineChartProps) {
       <CardFooter>
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
-            <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              Stock Price History
-            </div>
           </div>
         </div>
       </CardFooter>
