@@ -22,9 +22,8 @@ interface LineChartProps {
 }
 
 export function LineChart({ data }: LineChartProps) {
-  const formatTime = (timestamp: number) => {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const formatInterval = (value: number) => {
+    return `${value * 3}s`;
   };
 
   return (
@@ -38,7 +37,7 @@ export function LineChart({ data }: LineChartProps) {
           <AreaChart
             width={800}
             height={400}
-            data={data}
+            data={data.map((item, index) => ({ ...item, index }))}
             margin={{
               top: 10,
               right: 30,
@@ -48,18 +47,16 @@ export function LineChart({ data }: LineChartProps) {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="timestamp"
+              dataKey="index"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={formatTime}
+              tickFormatter={formatInterval}
             />
             <YAxis tickLine={false} axisLine={false} tickMargin={8} />
             <Tooltip
               formatter={(value: number) => [`$${value.toFixed(2)}`, "Price"]}
-              labelFormatter={(timestamp) =>
-                new Date(timestamp).toLocaleString()
-              }
+              labelFormatter={(value) => `${value * 3}s`}
             />
             <Area
               type="monotone"

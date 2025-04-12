@@ -62,13 +62,10 @@ const Home: React.FC = () => {
 
       <div className="relative">
         <LineChart data={stockData} />
-        <div className="absolute bottom-2 right-2 bg-white/80 px-2 py-1 rounded text-sm">
-          Last update: {new Date(stockData[0]?.timestamp).toLocaleTimeString()}
-        </div>
       </div>
 
       <p className="text-green-500">
-        Current Price: {stockData[0]?.price || "N/A"}
+        Current Price: {stockData[stockData.length - 1]?.price || "N/A"}
       </p>
 
       <div className="flex flex-col items-center space-y-4">
