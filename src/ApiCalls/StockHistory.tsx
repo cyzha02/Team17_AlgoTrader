@@ -18,21 +18,25 @@ export interface StockData {
 }
 
 export const userInfo = async (): Promise<UserInfo> => {
-  const response = await fetch("http://82.29.197.23:8000/accounts/3", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
   try {
+    const response = await fetch("http://82.29.197.23:8000/accounts/3", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
     if (!response.ok) {
       throw new Error(`HTTP error, status: ${response.status}`);
     }
 
     const data = await response.json();
+    if (!data || typeof data !== "object") {
+      throw new Error("Invalid response format");
+    }
     return data;
   } catch (error) {
-    console.error("Error fetching stock history:", error);
+    console.error("Error fetching user info:", error);
     throw error;
   }
 };

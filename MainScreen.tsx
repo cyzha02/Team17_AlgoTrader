@@ -1,14 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { fetchStockHistory, StockData } from "./src/ApiCalls/StockHistory";
+import {
+  fetchStockHistory,
+  StockData,
+  userInfo,
+  UserInfo,
+} from "./src/ApiCalls/StockHistory";
 import { LineChart } from "@/components/ui/linechart";
 import { InputWithButton } from "@/components/ui/inputwithbutton";
-import { OrderTypeSelect } from "@/components/ui/order-type-select";
 
 const Home: React.FC = () => {
   const [stockData, setStockData] = useState<StockData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [orderType, setOrderType] = useState<"market" | "limit">("market");
+  const [userData, setUserData] = useState<UserInfo>();
+
+  const fetchUserData = async () => {
+    try {
+      const response = await userInfo();
+      setUserData(response);
+    } catch {
+      setError("Error fetching user data");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -23,6 +39,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     fetchData();
+
     // set up interval for subsequent fetching every 3 seconds
     const intervalId = setInterval(fetchData, 3000);
     // cleanup to clear interval on component unmount
@@ -59,7 +76,6 @@ const Home: React.FC = () => {
     <div className="home-container">
       <h1 className="text-green-500 font-bold text-4xl">HACK Stock Trader</h1>
       <p className="text-green-500">The algorithmic trading platform</p>
-
       <div className="relative">
         <LineChart data={stockData} />
       </div>
@@ -69,11 +85,6 @@ const Home: React.FC = () => {
       </p>
 
       <div className="flex flex-col items-center space-y-4">
-        <div className="flex items-center space-x-2">
-          <span className="text-green-500">Order Type:</span>
-          <OrderTypeSelect value={orderType} onChange={setOrderType} />
-        </div>
-
         <div className="flex flex-row gap-2 justify-center">
           <InputWithButton
             name="Buy"

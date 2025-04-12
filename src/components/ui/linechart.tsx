@@ -53,7 +53,12 @@ export function LineChart({ data }: LineChartProps) {
               tickMargin={8}
               tickFormatter={formatInterval}
             />
-            <YAxis tickLine={false} axisLine={false} tickMargin={8} />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              tickMargin={2}
+              tickFormatter={(value) => `$${value.toFixed(2)}`}
+            />
             <Tooltip
               formatter={(value: number) => [`$${value.toFixed(2)}`, "Price"]}
               labelFormatter={(value) => `${value * 3}s`}
