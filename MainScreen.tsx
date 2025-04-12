@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import { fetchStockHistory, StockData } from "./src/ApiCalls/StockHistory";
 import { LineChart } from "@/components/ui/linechart";
 import { InputWithButton } from "@/components/ui/inputwithbutton";
+import { OrderTypeSelect } from "@/components/ui/order-type-select";
 
 const Home: React.FC = () => {
-  const [buy, setBuy] = useState(0);
-  const [sell, setSell] = useState(0);
-
   const [stockData, setStockData] = useState<StockData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+  const [orderType, setOrderType] = useState<"market" | "limit">("market");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,6 +30,24 @@ const Home: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  const handleBuy = (
+    value: string,
+    orderType: "market" | "limit",
+    limitPrice?: string
+  ) => {
+    console.log("Buy order:", { value, orderType, limitPrice });
+    // TODO: Implement buy logic
+  };
+
+  const handleSell = (
+    value: string,
+    orderType: "market" | "limit",
+    limitPrice?: string
+  ) => {
+    console.log("Sell order:", { value, orderType, limitPrice });
+    // TODO: Implement sell logic
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -40,23 +57,31 @@ const Home: React.FC = () => {
   }
 
   return (
-    <div className="home-container ">
+    <div className="home-container">
       <h1 className="text-green-500 font-bold text-4xl">HACK Stock Trader</h1>
       <p className="text-green-500">The algorithmic trading platform</p>
 
       <LineChart data={stockData} />
-      <p className="text-green-500"> Current Price: {stockData[0].price}</p>
-      <div className="flex flex-row gap-2 justify-center">
-        <InputWithButton
-          name="Buy"
-          onSubmit={() => {}}
-          className="bg-green-500"
-        />
-        <InputWithButton
-          name="Sell"
-          onSubmit={() => {}}
-          className="bg-red-500"
-        />
+      <p className="text-green-500">Current Price: {stockData[0].price}</p>
+
+      <div className="flex flex-col items-center space-y-4">
+        <div className="flex items-center space-x-2">
+          <span className="text-green-500">Order Type:</span>
+          <OrderTypeSelect value={orderType} onChange={setOrderType} />
+        </div>
+
+        <div className="flex flex-row gap-2 justify-center">
+          <InputWithButton
+            name="Buy"
+            onSubmit={handleBuy}
+            className="bg-green-500"
+          />
+          <InputWithButton
+            name="Sell"
+            onSubmit={handleSell}
+            className="bg-red-500"
+          />
+        </div>
       </div>
     </div>
   );
