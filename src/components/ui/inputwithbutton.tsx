@@ -29,7 +29,7 @@ export function InputWithButton({
       <div className="flex space-x-2">
         <Input
           type="text"
-          placeholder="Value"
+          placeholder="Amount"
           className="bg-white"
           value={value}
           onChange={(e) => setValue(e.target.value)}
@@ -38,16 +38,19 @@ export function InputWithButton({
           {name}
         </Button>
       </div>
-      <div className="flex space-x-2">
+      <div className="flex flex-col space-y-2">
         <OrderTypeSelect value={orderType} onChange={setOrderType} />
         {orderType === "limit" && (
-          <Input
-            type="text"
-            placeholder="Limit Price"
-            value={limitPrice}
-            onChange={(e) => setLimitPrice(e.target.value)}
-            className="bg-white"
-          />
+          <div className="flex space-x-2">
+            <span className="text-sm text-white">Limit Price:</span>
+            <Input
+              type="text"
+              placeholder="Enter limit price"
+              value={limitPrice}
+              onChange={(e) => setLimitPrice(e.target.value)}
+              className="bg-white "
+            />
+          </div>
         )}
       </div>
     </div>

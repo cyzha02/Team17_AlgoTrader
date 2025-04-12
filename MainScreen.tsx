@@ -62,14 +62,11 @@ const Home: React.FC = () => {
       <p className="text-green-500">The algorithmic trading platform</p>
 
       <LineChart data={stockData} />
-      <p className="text-green-500">Current Price: {stockData[0].price}</p>
-
+      <p className="text-green-500">
+        Current Price: {stockData[stockData.length - 1].price}
+      </p>
+      <p className="text-white text-2xl font-bold">MANUAL TRADE</p>
       <div className="flex flex-col items-center space-y-4">
-        <div className="flex items-center space-x-2">
-          <span className="text-green-500">Order Type:</span>
-          <OrderTypeSelect value={orderType} onChange={setOrderType} />
-        </div>
-
         <div className="flex flex-row gap-2 justify-center">
           <InputWithButton
             name="Buy"

@@ -19,10 +19,10 @@ export function OrderTypeSelect({ value, onChange }: OrderTypeSelectProps) {
       value={value}
       onValueChange={(value: string) => onChange(value as OrderType)}
     >
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-[180px] bg-white">
         <SelectValue placeholder="Select order type" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="bg-white">
         <SelectItem value="market">Market Order</SelectItem>
         <SelectItem value="limit">Limit Order</SelectItem>
       </SelectContent>
