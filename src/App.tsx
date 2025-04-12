@@ -1,8 +1,8 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import Home from '../MainScreen'
-import About from '../About'
-import './App.css'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import Home from "../MainScreen";
+import About from "../About";
+import "./App.css";
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
         </main>
       </div>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
