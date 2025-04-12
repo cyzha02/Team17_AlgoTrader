@@ -7,7 +7,6 @@ import {
 import TradingService from "../ApiCalls/TradingService";
 import { SmaCrossoverStrategy } from "../Algo/SmaCrossoverAlgo";
 import { LineChart } from "@/components/ui/linechart";
-import { InputWithButton } from "@/components/ui/inputwithbutton";
 import { OrderRequest } from "../types/trading";
 import { useAuth } from "../context/AuthContext";
 
