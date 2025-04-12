@@ -5,7 +5,7 @@ const API_URL = import.meta.env.VITE_API_URL || "http://82.29.197.23:8000";
 interface AuthResponse {
   message: string;
   user_id: number;
-  token: string;
+  is_admin: boolean;
 }
 
 class ApiService {
@@ -15,12 +15,10 @@ class ApiService {
   };
 
   private static isAuthenticated: boolean = false;
-  private static authToken: string | null = null;
 
   static setCredentials(credentials: TradingCredentials) {
     this.credentials = credentials;
     this.isAuthenticated = false;
-    this.authToken = null;
   }
 
   static isUserAuthenticated(): boolean {
@@ -46,9 +44,8 @@ class ApiService {
 
       const data: AuthResponse = await response.json();
 
-      if (data.token) {
+      if (data.message === "Authentication successful") {
         this.isAuthenticated = true;
-        this.authToken = data.token;
         return true;
       }
 
@@ -56,7 +53,6 @@ class ApiService {
     } catch (error) {
       console.error("Authentication error:", error);
       this.isAuthenticated = false;
-      this.authToken = null;
       return false;
     }
   }
@@ -73,7 +69,7 @@ class ApiService {
     }
 
     const headers = {
-      Authorization: `Bearer ${this.authToken}`,
+      Authorization: `Basic ${btoa(`${this.credentials.user_id}:${this.credentials.password}`)}`,
       "Content-Type": "application/json",
       ...options.headers,
     };
@@ -86,7 +82,6 @@ class ApiService {
     if (!response.ok) {
       if (response.status === 401) {
         this.isAuthenticated = false;
-        this.authToken = null;
         const authSuccess = await this.authenticate();
         if (!authSuccess) {
           throw new Error("Failed to reauthenticate");
