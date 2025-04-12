@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { fetchStockHistory, StockData } from "../ApiCalls/StockHistory";
 import TradingService from "../ApiCalls/TradingService";
 import { LineChart } from "@/components/ui/linechart";
 import { InputWithButton } from "@/components/ui/inputwithbutton";
 
 const Home: React.FC = () => {
+  const location = useLocation();
+  const userId = location.state?.userId;
+
   const [stockData, setStockData] = useState<StockData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
@@ -12,10 +16,13 @@ const Home: React.FC = () => {
 
   const fetchUserData = async () => {
     try {
-      const accountInfo = await TradingService.getAccountInfo(3);
+      if (!userId) {
+        throw new Error("User ID not found");
+      }
+      const accountInfo = await TradingService.getAccountInfo(userId);
       console.log("Account Info:", accountInfo);
-    } catch {
-      setError("Error fetching user data");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Error fetching user data");
     } finally {
       setLoading(false);
     }
@@ -33,6 +40,7 @@ const Home: React.FC = () => {
   };
 
   useEffect(() => {
+    fetchUserData();
     fetchData();
 
     // set up interval for subsequent fetching every 3 seconds

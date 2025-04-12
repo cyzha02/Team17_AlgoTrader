@@ -22,7 +22,7 @@ const Login: React.FC = () => {
       const success = await ApiService.authenticate();
 
       if (success) {
-        navigate("/"); // Redirect to dashboard after successful login (which is the root page)
+        navigate("/", { state: { userId: credentials.user_id } }); // Redirect to dashboard after successful login (which is the root page)
       } else {
         setError("Invalid credentials");
       }
