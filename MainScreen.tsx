@@ -16,6 +16,7 @@ const Home: React.FC = () => {
       try {
         const data = await fetchStockHistory();
         setStockData([...data].reverse());
+        console.log("Stock data updated");
       } catch (error) {
         setError("Error fetching stock data");
       } finally {
@@ -24,6 +25,10 @@ const Home: React.FC = () => {
     };
 
     fetchData();
+    // set up interval for subsequent fetching every 5 seconds
+    const intervalId = setInterval(fetchData, 5000);
+    // cleanup to clear interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   if (loading) {
@@ -33,6 +38,7 @@ const Home: React.FC = () => {
   if (error) {
     return <div>{error}</div>;
   }
+
   return (
     <div className="home-container ">
       <h1 className="text-green-500 font-bold text-4xl">HACK Stock Trader</h1>
